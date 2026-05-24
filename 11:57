@@ -1,0 +1,182 @@
+from pathlib import Path
+from zipfile import ZipFile
+import shutil
+
+base = Path("/mnt/data/1157_couture_updated")
+base.mkdir(exist_ok=True)
+
+# Copy uploaded logo
+logo_src = Path("/mnt/data/B7875EAA-95AB-4C1D-8FB3-003B452CB8C1.png")
+logo_dest = base / "logo.png"
+shutil.copy(logo_src, logo_dest)
+
+html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11:57 Couture</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero">
+  <nav>
+    <div class="logo-text">11:57 Couture</div>
+    <ul>
+      <li><a href="#shop">Shop</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero-content">
+    <img src="logo.png" alt="11:57 Couture Logo" class="brand-logo">
+    <h1>Luxury Male Clothing & Accessories</h1>
+    <p>Premium fashion for men — clothing, shoes, watches, shades, belts and stylish accessories.</p>
+    <a href="#shop" class="btn">Explore Collection</a>
+  </div>
+</header>
+
+<section id="shop" class="products">
+  <h2>Featured Collection</h2>
+  <div class="product-grid">
+    <div class="card">
+      <h3>Luxury Outfits</h3>
+      <p>Premium male fashion for every occasion.</p>
+    </div>
+    <div class="card">
+      <h3>Designer Watches</h3>
+      <p>Elegant accessories to complete your look.</p>
+    </div>
+    <div class="card">
+      <h3>Streetwear</h3>
+      <p>Modern fashion with luxury comfort and style.</p>
+    </div>
+    <div class="card">
+      <h3>Accessories</h3>
+      <p>Belts, shades, caps, shoes, and more.</p>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="about">
+  <h2>About 11:57 Couture</h2>
+  <p>11:57 Couture delivers luxury men’s clothing and accessories with class, confidence, and timeless style.</p>
+</section>
+
+<section id="contact" class="contact">
+  <h2>Contact Us</h2>
+  <p><strong>Contact on WhatsApp:</strong> +234 911 573 9236</p>
+</section>
+
+<footer>
+  <p>© 2026 11:57 Couture. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
+"""
+
+css = """*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+body{
+background:#111;
+color:#fff;
+}
+.hero{
+min-height:100vh;
+padding-bottom:50px;
+background:#111;
+}
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 10%;
+}
+.logo-text{
+font-size:28px;
+font-weight:bold;
+color:#d4af37;
+}
+nav ul{
+display:flex;
+list-style:none;
+gap:20px;
+}
+nav a{
+color:#fff;
+text-decoration:none;
+}
+.hero-content{
+text-align:center;
+padding:50px 20px;
+}
+.brand-logo{
+max-width:320px;
+width:100%;
+background:#fff;
+padding:10px;
+border-radius:12px;
+margin-bottom:30px;
+}
+.hero-content h1{
+font-size:50px;
+margin-bottom:20px;
+}
+.hero-content p{
+max-width:700px;
+margin:auto;
+margin-bottom:25px;
+}
+.btn{
+display:inline-block;
+background:#d4af37;
+color:#000;
+padding:14px 30px;
+text-decoration:none;
+border-radius:30px;
+font-weight:bold;
+}
+.products,.about,.contact{
+padding:80px 10%;
+text-align:center;
+}
+h2{
+color:#d4af37;
+margin-bottom:30px;
+font-size:36px;
+}
+.product-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+.card{
+background:#1b1b1b;
+padding:30px;
+border-radius:15px;
+}
+footer{
+background:#000;
+padding:20px;
+text-align:center;
+color:#aaa;
+}
+"""
+
+(base / "index.html").write_text(html, encoding="utf-8")
+(base / "style.css").write_text(css, encoding="utf-8")
+
+zip_path = "/mnt/data/11_57_Couture_Website_Updated.zip"
+
+with ZipFile(zip_path, "w") as zf:
+    for file in base.iterdir():
+        zf.write(file, arcname=file.name)
+
+print(zip_path)
